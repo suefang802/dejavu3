@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>標準九宮格數獨</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        /* 數獨大外框 */
+        .sudoku-container {
+            border: 4px solid #000000;
+            background-color: #fff;
+            display: inline-block;
+        }
+        .row {
+            display: flex;
+        }
+        /* 基礎格子樣式 */
+        .cell {
+            width: 55px;
+            height: 55px;
+            border: 1px solid #b0b0b0; /* 內部細灰線 */
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 55px;
+            user-select: none;
+            box-sizing: border-box;
+            background-color: #ffffff; /* 全白底色 */
+        }
+        
+        /* ==========================================
+           標準 3*3 九宮格的粗黑線樣式 
+           ========================================== */
+        .bb-thick { border-bottom: 4px solid #000000; }
+        .br-thick { border-right: 4px solid #000000; }
+
+        /* 初始提示字顏色 */
+        .preset {
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>標準九宮格數獨 (Standard Sudoku)</h2>
+    
+    <div class="sudoku-container" id="grid"></div>
+
+<script>
+    // 依據你先前的數獨題目資料 (0 表示空格)
+    const sudokuData = [
+        [5, 3, 0,  0, 7, 0,  0, 0, 0],
+        [6, 0, 0,  1, 9, 5,  0, 0, 0],
+        [0, 9, 8,  0, 0, 0,  0, 6, 0],
+        
+        [8, 0, 0,  0, 6, 0,  0, 0, 3],
+        [4, 0, 0,  8, 0, 3,  0, 0, 1],
+        [7, 0, 0,  0, 2, 0,  0, 0, 6],
+        
+        [0, 6, 0,  0, 0, 0,  2, 8, 0],
+        [0, 0, 0,  4, 1, 9,  0, 0, 5],
+        [0, 0, 0,  0, 8, 0,  0, 7, 9]
+    ];
+
+    const gridContainer = document.getElementById('grid');
+
+    for (let r = 0; r < 9; r++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'row';
+        
+        for (let c = 0; c < 9; c++) {
+            const cellDiv = document.createElement('div');
+            cellDiv.className = 'cell';
+            
+            // 填入數字
+            if (sudokuData[r][c] !== 0) {
+                cellDiv.textContent = sudokuData[r][c];
+                cellDiv.classList.add('preset');
+            }
+            
+            // ==========================================
+            // 關鍵：用數學邏輯精準切出 3*3 的直粗線
+            // ==========================================
+            
+            // 每逢第 3、6 欄（索引為 2 和 5）的右邊，畫上垂直粗黑線
+            if (c === 2 || c === 5) {
+                cellDiv.classList.add('br-thick');
+            }
+            
+            // 每逢第 3、6 列（索引為 2 和 5）的下邊，畫上水平粗黑線
+            if (r === 2 || r === 5) {
+                cellDiv.classList.add('bb-thick');
+            }
+
+            rowDiv.appendChild(cellDiv);
+        }
+        gridContainer.appendChild(rowDiv);
+    }
+</script>
+
+</body>
+</html>
